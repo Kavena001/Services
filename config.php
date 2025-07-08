@@ -1,9 +1,9 @@
 <?php
 // Database configuration for Hostinger
 define('DB_HOST', 'localhost'); // Usually 'localhost' on Hostinger
-define('DB_NAME', 'your_database_name'); // Replace with your actual database name
-define('DB_USER', 'your_database_user'); // Replace with your database username
-define('DB_PASS', 'your_database_password'); // Replace with your database password
+define('DB_NAME', 'dbService'); // Replace with your actual database name
+define('DB_USER', 'phoenix_1968'); // Replace with your database username
+define('DB_PASS', 'Ossouka@1968'); // Replace with your database password
 
 // Establish database connection
 try {
