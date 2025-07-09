@@ -1,16 +1,19 @@
-# Disable directory browsing
-Options -Indexes
+# admin/.htaccess
+DirectoryIndex index.php
 
-# Restrict access to PHP files
-<FilesMatch "\.(php)$">
-    Require all denied
-    Require valid-user
-</FilesMatch>
-
-# Protect against XSS
 <IfModule mod_rewrite.c>
-    RewriteCond %{QUERY_STRING} (\<|%3C).*script.*(\>|%3E) [NC,OR]
-    RewriteCond %{QUERY_STRING} GLOBALS(=|\[|\%[0-9A-Z]{0,2}) [OR]
-    RewriteCond %{QUERY_STRING} _REQUEST(=|\[|\%[0-9A-Z]{0,2})
-    RewriteRule ^(.*)$ index.php [F,L]
+    RewriteEngine On
+    RewriteBase /admin/
+    
+    # Allow direct access to files and directories
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    
+    # Redirect everything else to index.php
+    RewriteRule . index.php [L]
 </IfModule>
+
+# Prevent access to specific files
+<FilesMatch "(\.htaccess|auth\.php|config\.php)$">
+    Require all denied
+</FilesMatch>
