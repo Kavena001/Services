@@ -1,6 +1,4 @@
 <?php
-// db_functions.php - Database Operations
-
 require_once 'config.php';
 
 /**

@@ -1,0 +1,28 @@
+# Security and path handling
+RewriteEngine On
+
+# Prevent directory listing
+Options -Indexes
+
+# Protect sensitive files
+<FilesMatch "(config\.php|db_functions\.php|\.htaccess)">
+    Require all denied
+</FilesMatch>
+
+# Redirect to HTTPS if available
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Fix missing trailing slash on directories
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^(.*[^/])$ %{REQUEST_URI}/ [L,R=301]
+
+# Handle front controller
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [L]
+
+# Cache control for static assets
+<FilesMatch "\.(css|js|jpg|jpeg|png|gif|ico|svg)$">
+    Header set Cache-Control "max-age=31536000, public"
+</FilesMatch>

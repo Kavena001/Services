@@ -1,9 +1,10 @@
 <?php
+require_once 'config.php';
 require_once 'db_functions.php';
 
 // Only process POST requests
 if ($_SERVER["REQUEST_METHOD"] !== "POST") {
-    header("Location: contact.php");
+    header("Location: " . asset_url('contact.php'));
     exit;
 }
 
@@ -11,7 +12,7 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 $required = ['firstName', 'lastName', 'email', 'subject', 'message'];
 foreach ($required as $field) {
     if (empty($_POST[$field])) {
-        header("Location: contact.php?error=missing_fields");
+        header("Location: " . asset_url('contact.php?error=1'));
         exit;
     }
 }
@@ -28,7 +29,7 @@ $data = [
 
 // Validate email
 if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-    header("Location: contact.php?error=invalid_email");
+    header("Location: " . asset_url('contact.php?error=1'));
     exit;
 }
 
@@ -37,10 +38,10 @@ if (insertContactSubmission($data)) {
     // Send email notification (optional)
     // sendContactEmail($data);
     
-    // Redirect to thank you page
-    header("Location: thank-you.php");
+    // Redirect to success page
+    header("Location: " . asset_url('contact.php?success=1'));
 } else {
-    header("Location: contact.php?error=database_error");
+    header("Location: " . asset_url('contact.php?error=1'));
 }
 exit;
 ?>

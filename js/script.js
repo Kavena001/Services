@@ -1,42 +1,54 @@
+// Initialize tooltips
 document.addEventListener('DOMContentLoaded', function() {
-    // Smooth scrolling for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
+    // Initialize Bootstrap tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
     });
     
-    // Form submission handling
-    const contactForm = document.querySelector('.contact-form form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Thank you for your message! We will get back to you soon.');
-            this.reset();
+    // Form validation
+    const forms = document.querySelectorAll('form');
+    if (forms) {
+        forms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                const requiredFields = form.querySelectorAll('[required]');
+                let valid = true;
+                
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        valid = false;
+                        field.classList.add('is-invalid');
+                    } else {
+                        field.classList.remove('is-invalid');
+                    }
+                });
+                
+                if (!valid) {
+                    e.preventDefault();
+                    
+                    // Scroll to first error
+                    const firstError = form.querySelector('.is-invalid');
+                    if (firstError) {
+                        firstError.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'center'
+                        });
+                    }
+                }
+            });
         });
     }
     
-    // Service details page functionality
-    if (document.querySelector('.service-details')) {
-        // Get the service parameter from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const service = urlParams.get('service');
-        
-        // Hide all service content divs
-        document.querySelectorAll('.service-content').forEach(div => {
-            div.style.display = 'none';
+    // Alert auto-dismiss
+    const alerts = document.querySelectorAll('.alert');
+    if (alerts) {
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                alert.style.opacity = '0';
+                setTimeout(() => {
+                    alert.style.display = 'none';
+                }, 300);
+            }, 5000);
         });
-        
-        // Show the selected service content
-        if (service && document.getElementById(`${service}-content`)) {
-            document.getElementById(`${service}-content`).style.display = 'block';
-        } else {
-            // Default to first service if none specified
-            document.querySelector('.service-content').style.display = 'block';
-        }
     }
 });
